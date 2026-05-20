@@ -70,6 +70,20 @@ _SPAIN_SOURCES: list[SourceDict] = [
 ]
 
 # ---------------------------------------------------------------------------
+# Культурные новости — анонсы сезонов, премьеры, события мирового уровня
+# Сюда попадают статьи типа «Les Arts объявил программу сезона»
+# ---------------------------------------------------------------------------
+_CULTURE_NEWS_SOURCES: list[SourceDict] = [
+    {
+        "name": "El País Cultura",
+        "feed_url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/cultura/portada",
+        "site_url": "https://elpais.com/cultura/",
+        "region": "spain",
+        "channel": "news",
+    },
+]
+
+# ---------------------------------------------------------------------------
 # Региональные источники Валенсии
 # Новостные → "news", культурные институции → "events"
 # ---------------------------------------------------------------------------
@@ -348,6 +362,7 @@ _SPORT_SOURCES: list[SourceDict] = [
 # ---------------------------------------------------------------------------
 SOURCES: list[SourceDict] = (
     _SPAIN_SOURCES
+    + _CULTURE_NEWS_SOURCES
     + _VALENCIA_SOURCES
     + _TOURISM_SOURCES
     + _GASTRONOMY_SOURCES
