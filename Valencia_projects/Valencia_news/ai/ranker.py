@@ -132,10 +132,12 @@ class Ranker:
             valencia_articles, key=lambda a: a.importance_score + _rule_boost(a), reverse=True
         )
 
-        # Национальные: только серьёзные категории с достаточной важностью
+        # Национальные: серьёзные категории ИЛИ высокий rule_boost (крупный культурный анонс)
+        # rule_boost >= 0.25 означает «мировая премьера / сезон крупной институции» —
+        # такие статьи важнее категориального фильтра
         spain_serious = [
             a for a in other_articles
-            if a.category in _SPAIN_ALLOWED_CATEGORIES
+            if (a.category in _SPAIN_ALLOWED_CATEGORIES or _rule_boost(a) >= 0.25)
             and a.importance_score >= _SPAIN_MIN_IMPORTANCE
         ]
         spain_sorted = sorted(spain_serious, key=lambda a: a.importance_score + _rule_boost(a), reverse=True)
