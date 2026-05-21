@@ -47,6 +47,7 @@ def _parser_to_model(art: ParserParsedArticle) -> ParsedArticle:
         content=art.text,
         image_url=art.image_url,
         language="es",
+        event_end_date=getattr(art, "event_end_date", None),
     )
 
 
@@ -362,6 +363,7 @@ class NewsAggregator:
             is_published=False,
             image_url=art.image_url,
             channel=self._cfg.channel,
+            event_end_date=art.event_end_date,
         )
 
     def _save_website_articles(self, articles: list[ProcessedArticle]) -> int:

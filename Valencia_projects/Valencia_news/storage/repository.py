@@ -89,15 +89,60 @@ class ArticleRepository:
             stmt = stmt.where(Article.channel == channel)
         return set(self._session.scalars(stmt).all())
 
-    def get_latest_for_export(self, channel: str, limit: int = 50) -> list[Article]:
-        """Последние N статей канала с непустым summary_ru, для JSON-экспорта."""
+    def get_latest_for_export(
+        self,
+        channel: str,
+        limit: int = 50,
+        min_published_at: Optional[datetime] = None,
+    ) -> list[Article]:
+        """Последние N статей канала с непустым summary_ru, для JSON-экспорта.
+
+        min_published_at: если указан, исключает статьи с published_at < порога
+        (используется для канала events чтобы не показывать прошедшие события).
+        """
+        conditions = [
+            Article.channel == channel,
+            Article.summary_ru.isnot(None),
+            Article.summary_ru != "",
+        ]
+        if min_published_at is not None:
+            conditions.append(
+                (Article.published_at >= min_published_at) | Article.published_at.is_(None)
+            )
         stmt = (
             select(Article)
-            .where(
-                Article.channel == channel,
-                Article.summary_ru.isnot(None),
-                Article.summary_ru != "",
+            .where(*conditions)
+            .order_by(Article.published_at.desc())
+            .limit(limit)
+        )
+        return list(self._session.scalars(stmt).all())
+
+    def get_events_for_export(self, limit: int = 200, today_midnight: Optional[datetime] = None) -> list[Article]:
+        """События для сайта: только те, что ещё не закончились.
+
+        Логика фильтрации:
+        - event_end_date заполнена → показываем если event_end_date >= today_midnight
+        - event_end_date не заполнена → показываем если published_at >= today_midnight
+          (для старых записей без event_end_date, принимаем published_at как дату события)
+        """
+        from sqlalchemy import or_, and_
+        cutoff = today_midnight
+        conditions = [
+            Article.channel == "events",
+            Article.summary_ru.isnot(None),
+            Article.summary_ru != "",
+        ]
+        if cutoff is not None:
+            conditions.append(
+                or_(
+                    and_(Article.event_end_date.isnot(None), Article.event_end_date >= cutoff),
+                    and_(Article.event_end_date.is_(None), Article.published_at >= cutoff),
+                    and_(Article.event_end_date.is_(None), Article.published_at.is_(None)),
+                )
             )
+        stmt = (
+            select(Article)
+            .where(*conditions)
             .order_by(Article.published_at.desc())
             .limit(limit)
         )

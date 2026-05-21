@@ -24,18 +24,20 @@ DATA_DIR = Path(__file__).parent / "website" / "public" / "data"
 def export_to_website() -> None:
     """Читает из SQLite, пишет JSON в website/public/data/."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    now = datetime.now(timezone.utc).isoformat()
+    now_utc = datetime.now(timezone.utc)
+    today_midnight = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
 
     with get_session() as session:
         repo = ArticleRepository(session)
-        # news: больший лимит чтобы показывать на сайте все статьи дня, а не только топ-Telegram
-        # events: большой лимит — будущие концерты вытесняют текущие новости культуры
         CHANNEL_LIMITS = {"news": 100, "events": 200}
         for channel in CHANNELS:
             limit = CHANNEL_LIMITS.get(channel, 50)
-            articles = repo.get_latest_for_export(channel=channel, limit=limit)
+            if channel == "events":
+                articles = repo.get_events_for_export(limit=limit, today_midnight=today_midnight)
+            else:
+                articles = repo.get_latest_for_export(channel=channel, limit=limit)
             data = {
-                "updated_at": now,
+                "updated_at": now_utc.isoformat(),
                 "channel": channel,
                 "articles": [_to_dict(a) for a in articles],
             }

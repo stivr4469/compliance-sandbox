@@ -90,6 +90,9 @@ class Article(Base):
         String(32), nullable=False, default="news", server_default="news", index=True
     )
 
+    # Дата окончания события (для афиши): для разовых = published_at, для выставок = дата закрытия
+    event_end_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
     def __init__(self, **kwargs: object) -> None:
         kwargs.setdefault("channel", "news")
         super().__init__(**kwargs)

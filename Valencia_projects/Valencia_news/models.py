@@ -27,6 +27,7 @@ class ParsedArticle:
     content: str = ""  # Полный текст статьи (может быть пустым при RSS-только)
     image_url: str | None = None
     language: str = "es"  # Исходный язык статьи
+    event_end_date: datetime | None = None  # Дата окончания события (для канала events)
 
 
 @dataclass
