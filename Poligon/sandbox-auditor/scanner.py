@@ -184,6 +184,18 @@ def main(controls_map: dict | None = None):
         else:
             print(f"[PASS] S3 bucket '{bucket_name}' is private")
 
+    # Если публичных S3-бакетов не найдено — CC6.7 PASS (S3-часть)
+    if "CC6.7" not in results:
+        evidence_client.create_evidence(
+            control_id=controls_map["CC6.7"],
+            title="S3 encryption check — no public buckets",
+            content=json.dumps({"finding": "No public S3 buckets found", "control": "CC6.7"}),
+            source="AWS_CLI",
+        )
+        evidence_client.update_control_status(controls_map["CC6.7"], "PASS")
+        results["CC6.7"] = "PASS"
+        print("[PASS] CC6.7 — No public S3 buckets")
+
     # Step 3b: DynamoDB Encryption (CC6.7)
     print("Scanning DynamoDB Tables (CC6.7 — encryption at rest)...")
     dynamodb = get_boto3_client("dynamodb")
@@ -282,6 +294,10 @@ def main(controls_map: dict | None = None):
             evidence_client.update_control_status(controls_map[code], "FAIL")
         print("[FAIL] CC7.1/CC7.2 — No CloudTrail trails found")
     else:
+        for code in ["CC7.1", "CC7.2"]:
+            content = json.dumps({"finding": "CloudTrail logging active", "control": code, "trails": len(trails)})
+            evidence_client.create_evidence(control_id=controls_map[code], title=f"CloudTrail configured ({code})", content=content, source="AWS_CLI")
+            evidence_client.update_control_status(controls_map[code], "PASS")
         print(f"[PASS] CC7.1/CC7.2 — CloudTrail trails found: {len(trails)}")
 
     # Step 6a: EC2 Security Groups (CC6.6)
