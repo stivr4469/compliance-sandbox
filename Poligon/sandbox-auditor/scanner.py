@@ -11,7 +11,14 @@ from constants import DANGEROUS_PORTS, AUTO_CONTROLS, CONTROLS_MAP_FILE
 log = get_logger(__name__)
 
 load_dotenv()
-...
+
+AWS_ACCESS_KEY_ID     = os.getenv("AWS_ACCESS_KEY_ID", "test")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "test")
+AWS_DEFAULT_REGION    = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
+LOCALSTACK_ENDPOINT   = os.getenv("LOCALSTACK_ENDPOINT", "http://localhost:4566")
+AWS_USE_LOCALSTACK    = os.getenv("AWS_USE_LOCALSTACK", "true").lower() == "true"
+EVIDENCE_TRACKER_URL  = os.getenv("EVIDENCE_TRACKER_URL", "http://localhost:8000")
+
 def get_boto3_client(service):
     kwargs = {
         "aws_access_key_id": AWS_ACCESS_KEY_ID,

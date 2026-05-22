@@ -292,11 +292,16 @@ class GitHubAgent:
         print("── Проверка 8: FAIL → GitHub Issues (CC4.2) ──")
         # Берём FAIL контроли из Evidence Tracker
         try:
+            api_key = os.getenv("EVIDENCE_API_KEY", "soc2-dev-key")
             resp = requests.get(
                 f"{EVIDENCE_TRACKER_URL}/api/v1/controls/",
-                timeout=10
+                headers={"X-API-Key": api_key},
+                timeout=10,
             )
             controls = resp.json()
+            if not isinstance(controls, list):
+                print(f"  ⚠️  Unexpected response: {controls}")
+                return
         except Exception as e:
             print(f"  ⚠️  Не удалось получить контроли: {e}")
             return
