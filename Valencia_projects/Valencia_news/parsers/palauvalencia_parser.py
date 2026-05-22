@@ -177,12 +177,14 @@ def _parse_card(
     parts.append("Palau de la Música de València.")
 
     seen_urls.add(url)
+    published_at = event_dt or now
     return ParsedArticle(
         url=url,
         title=title,
         text=" | ".join(parts),
         image_url=image_url,
-        published_at=event_dt or now,
+        published_at=published_at,
+        event_end_date=published_at,
         source_name="Palau de la Música",
         source_url=BASE_URL,
         region="valencia",
