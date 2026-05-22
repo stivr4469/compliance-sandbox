@@ -428,11 +428,12 @@ POLICY_CONTROLS: Dict[str, Dict] = {
 
 # 9 контролей, закрываемых только через governance-документы
 GOVERNANCE_CONTROLS = {
-    "CC1.2", "CC1.3", "CC1.5",
-    "CC2.3",
+    "CC1.1", "CC1.2", "CC1.3", "CC1.5",
+    "CC2.2", "CC2.3",
     "CC3.1", "CC3.2", "CC3.3",
     "CC4.1",
     "CC5.1",
+    "CC9.1",
 }
 
 
