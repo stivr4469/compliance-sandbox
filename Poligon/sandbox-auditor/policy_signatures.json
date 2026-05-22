@@ -1,0 +1,15 @@
+{
+  "signatures": [
+    {
+      "envelope_id": "6a1278e8758a4704c58945c3c1dcac53",
+      "control_code": "CC1.1",
+      "policy_title": "Test Policy",
+      "signer_email": "ciso@test.com",
+      "signer_name": "CISO",
+      "status": "sent",
+      "created_at": "2026-05-22T14:34:57.306681+00:00",
+      "signed_at": null,
+      "signature_token": "592ca1c64c23cfba8a7ca35f469ba434516aabf31ef8586a9faba7bdc4b5ff51"
+    }
+  ]
+}
