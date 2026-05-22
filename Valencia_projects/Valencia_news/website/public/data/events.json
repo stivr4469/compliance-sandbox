@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-21T19:03:22.420223+00:00",
+  "updated_at": "2026-05-22T06:27:15.452496+00:00",
   "channel": "events",
   "articles": [
     {
@@ -638,28 +638,6 @@
       "image_url": "https://www.servientradas.com/ERP/3.1/empresas/003/001/ficheros/t00030050/2499_58/med_LA-HABITACION-ROJA-ORQUESTA-DE-VALENCIA.png",
       "category": "культура",
       "published_at": "2026-05-22T19:30:00",
-      "channel": "events"
-    },
-    {
-      "id": 426,
-      "title_ru": "Фестиваль Fronteras 2026",
-      "summary_ru": "В этот четверг, 21 мая, в Валенсии стартует 4-й фестиваль Fronteras — вдохновляющий микс музыки, литературы и кино. Всю неделю в Les Arts, Palau de la Música и Центре искусств Hortensia Herrero будут проходить концерты, встречи с известными авторами и поэтические перформансы. Среди звезд — Виктор Мануэль и Мария Родес. Это классный шанс послушать живые дискуссии и прикоснуться к искусству совершенно бесплатно. Программа также охватит книжные лавки и библиотеки города.",
-      "source_name": "Valencia.es Agenda",
-      "url": "https://www.valencia.es/cas/agenda-de-la-ciudad/-/content/festival-fronteras-2026",
-      "image_url": "https://www.valencia.es/documents/20142/39376095/20260422festivalfronteras.png/d870d5f2-dec7-6a78-305c-140a6743afb4",
-      "category": "культура",
-      "published_at": "2026-05-21T22:00:00",
-      "channel": "events"
-    },
-    {
-      "id": 428,
-      "title_ru": "Кристина де Миддель. Апофеоз сейчас",
-      "summary_ru": "21 мая, в четверг, в музее IVAM открывается проект «Apoteosis Now» знаменитой Кристины де Миддель, президента легендарного агентства Magnum. Это захватывающее визуальное исследование мифов и массовой культуры через объектив одного из самых титулованных фотографов Испании. Выставка в центре Julio González продлится до 12 октября. Обязательно загляните, чтобы увидеть нестандартный взгляд на реальность. Вход в музей стоит 6€, а по воскресеньям — бесплатно.",
-      "source_name": "IVAM",
-      "url": "https://ivam.es/es/exposiciones/cristina-de-middel-apoteosis-now/",
-      "image_url": "https://ivam.es/wp-content/uploads/exposiciones/cristina-de-middel-apoteosis-now/Cristina-De-Middel-BLANCO-de-la-serie-Apoteosis-Now-2026.-Cristina-De-Middel_-Magnum-Photos-377x277.jpg",
-      "category": "культура",
-      "published_at": "2026-05-21T10:00:00",
       "channel": "events"
     }
   ]
