@@ -1,15 +1,21 @@
 import os
 import json
+import time
 import argparse
 import logging
 import requests
 import subprocess
 from typing import Optional, Dict, List
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from dotenv import load_dotenv
 from evidence_client import EvidenceClient
 from slack_notifier import SlackNotifier
 from constants import CONTROLS_MAP_FILE
+
+# OpenRouter free tier: 16 req/min → пауза 4 сек между запросами
+_INTER_REQUEST_DELAY = float(os.getenv("POLICY_REQUEST_DELAY", "4.0"))
+_RATE_LIMIT_RETRIES  = 4
+_RATE_LIMIT_BACKOFF  = [10, 30, 60, 120]  # секунды ожидания при 429
 
 load_dotenv()
 
@@ -211,11 +217,21 @@ Return ONLY the policy document text, no explanations or preamble."""
                 ])]
                 return "\n".join(clean).strip()
             else:
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[{"role": "user", "content": prompt}],
-                )
-                return response.choices[0].message.content
+                for attempt, wait in enumerate(_RATE_LIMIT_BACKOFF):
+                    try:
+                        response = self.client.chat.completions.create(
+                            model=self.model,
+                            messages=[{"role": "user", "content": prompt}],
+                        )
+                        return response.choices[0].message.content
+                    except RateLimitError as e:
+                        if attempt == len(_RATE_LIMIT_BACKOFF) - 1:
+                            raise
+                        logger.warning(
+                            f"Rate limit hit for {control_code} (attempt {attempt + 1}), "
+                            f"waiting {wait}s..."
+                        )
+                        time.sleep(wait)
         except Exception as e:
             logger.error(f"Error generating policy for {control_code}: {e}")
             raise
@@ -324,6 +340,10 @@ def main(controls_map: dict | None = None):
                 
         except Exception as e:
             logger.error(f"Failed to process {code}: {e}")
+        finally:
+            # Пауза между запросами к LLM (free tier: 16 req/min)
+            if not agent.use_gemini_cli:
+                time.sleep(_INTER_REQUEST_DELAY)
 
 if __name__ == "__main__":
     main()
