@@ -133,8 +133,9 @@ class MessageFormatter:
             location_escaped = _escape_markdown(location)
             location_line = f"\n📍 {location_escaped}"
 
-        article_url = getattr(article, "url", "") or WEBSITE_URL
-        site_link = f"[Подробнее →]({_escape_url(article_url)})"
+        article_id = getattr(article, "id", None)
+        article_page_url = f"{WEBSITE_URL}/article/{article_id}" if article_id else WEBSITE_URL
+        site_link = f"[Подробнее →]({_escape_url(article_page_url)})"
 
         block = (
             f"*{title_escaped}*\n"
